@@ -1,0 +1,9 @@
+105 | Sep  5 04:17:09 | XE1 | 198.18.0.121 | 3 | LINEPROTO-3-UPDOWN | Line protocol on Interface GigabitEthernet2, changed state to up | GROUP1_DC_ACI
+107 | Sep  5 04:17:09 | XE1 | 198.18.0.121 | 3 | LINEPROTO-3-UPDOWN | Line protocol on Interface GigabitEthernet2, changed state to up | GROUP1_DC_ACI
+108 | Sep 27 03:56:12 | ASA.HELENA.GG | 0.0.0.0 | 1 | ASA-1-111008 | User 'enable_15' executed the 'shutdown' command. | GROUP1_DC_ACI
+109 | Sep 27 04:06:46 | ASA.HELENA.GG | 0.0.0.0 | 3 | ASA-3-111010 | User 'enable_15', running 'CLI' from IP 10.16.4.24, executed 'no shutdown' | GROUP1_DC_ACI
+110 | Sep 27 03:56:13 | ASA.HELENA.GG | 0.0.0.0 | 2 | ASA-2-411003 | Interface inside, changed state to administratively up | GROUP1_DC_ACI
+111 | Sep 27 03:56:10 | ASA.HELENA.GG | 0.0.0.0 | 3 | ASA-3-111008 | User 'enable_15' executed the 'interface GigabitEthernet 0/2' command. | GROUP1_DC_ACI
+112 | Sep 27 03:35:33 | ASA.HELENA.GG | 0.0.0.0 | 2 | ASA-2-411003 | Interface inside, changed state to administratively up | GROUP1_DC_ACI
+113 | Sep 27 04:06:46 | ASA.HELENA.GG | 0.0.0.0 | 3 | ASA-3-111010 | User 'enable_15', running 'CLI' from IP 10.16.4.24, executed 'no shutdown' | GROUP1_DC_ACI
+114 | Sep 27 03:56:13 | ASA.HELENA.GG | 0.0.0.0 | 2 | ASA-2-411003 | Interface inside, changed state to administratively up | GROUP1_DC_ACI

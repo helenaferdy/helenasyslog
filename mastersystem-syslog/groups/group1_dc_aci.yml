@@ -1,0 +1,46 @@
+## GLOBAL ##
+log_path: installation/log_sample/group1_dc_aci.log
+# log_path: /var/log/cisco/group1_dc_aci.log
+telegram_id: -955087919
+whatsapp_id: '120363162449917809'
+webex_id: 'd154f870-5e77-11ee-ac0b-db4f2dd97786'
+webex_meeting_id: 'Y2lzY29zcGFyazovL3VzL1JPT00vZDE1NGY4NzAtNWU3Ny0xMWVlLWFjMGItZGI0ZjJkZDk3Nzg2'
+exclude_code:
+- ARP-3-DUP_VADDR_SRC_IP
+- TACACS-3-TACACS_ERROR_MESSAGE
+- AUTHPRIV-3-SYSTEM_MSG
+- LINK-3-UPDOWN
+exclude_message:
+- null
+include_code:
+- ETHPORT-5-IF_BANDWIDTH
+- ETHPORT-5-IF_DOWN_LINK_FAILURE
+- ETHPORT-5-IF_DOWN_MODULE_REMOVED
+include_message:
+- GigabitEthernet2
+include_severity:
+- '0'
+- '1'
+- '2'
+- '3'
+## SUB GROUP ##
+### sub group config will override global config ###
+sub_group:
+ sub_group_1_INT23:
+  host:
+  - 
+  exclude_code:
+  - 
+  exclude_message:
+  -
+  include_code:
+  - 
+  include_message:
+  - 
+  include_severity:
+  - '0'
+  - '1'
+  - '2'
+  - '3'
+  - '4'
+  - '5'

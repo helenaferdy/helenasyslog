@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# Define function to display options
+display_options() {
+  echo -e "\n------- Menu -------\n"
+  echo " 1. Python Program Directory"
+  echo " 2. Python Configuration Directory"
+  echo " 3. Python Groups Configuration Directory"
+  echo " 4. Python Logs Directory"
+  echo " 5. Rsyslog Configuration Directory"
+  echo " 6. Rsyslog Logs Directory"
+  echo " 7. Cron Logs"
+}
+
+# Loop until the user selects Quit
+while true; do
+  display_options
+  echo ""
+  read -p "Select menu : " choice
+
+  case $choice in
+    1)
+      cd /opt/mastersystem-syslog/ || exit 1
+      echo -e "\n------- Python Program Directory -------\n"
+      ls -la
+      exec bash
+      ;;
+    2)
+      cd /opt/mastersystem-syslog/conf || exit 1
+      echo -e "\n------- Python Configuration Directory -------\n"
+      ls -la
+      exec bash
+      ;;
+    3)
+      cd /opt/mastersystem-syslog/groups || exit 1
+      echo -e "\n------- Python Groups Configuration Directory -------\n"
+      ls -la
+      exec bash
+      ;;
+    4)
+      cd /opt/mastersystem-syslog/logs || exit 1
+      echo -e "\n------- Python Logs Directory -------\n"
+      ls -la
+      exec bash
+      ;;
+    5)
+      cd /etc/rsyslog.d/ || exit 1
+      echo -e "\n------- Rsyslog Configuration Directory -------\n"
+      ls -la
+      exec bash
+      ;;
+    6)
+      cd /var/log/cisco/ || exit 1
+      echo -e "\n------- Rsyslog Logs Directory -------\n"
+      ls -la
+      exec bash
+      ;;
+    7)
+      mastersystem_tail_logs
+      exec bash
+      ;;
+    *)
+      echo "Invalid choice. Please enter a valid option (1/2/3/4)."
+      ;;
+  esac
+done

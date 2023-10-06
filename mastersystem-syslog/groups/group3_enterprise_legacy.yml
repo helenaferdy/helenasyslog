@@ -1,0 +1,45 @@
+## GLOBAL ##
+log_path: /var/log/cisco/group3_enterprise_legacy.log
+telegram_id: -955087919
+whatsapp_id: '120363162449917809'
+webex_id: '65af5560-5e78-11ee-b543-2790d7de4e46'
+webex_meeting_id: 'Y2lzY29zcGFyazovL3VzL1JPT00vNjVhZjU1NjAtNWU3OC0xMWVlLWI1NDMtMjc5MGQ3ZGU0ZTQ2'
+exclude_code:
+- ARP-3-DUP_VADDR_SRC_IP
+- TACACS-3-TACACS_ERROR_MESSAGE
+- AUTHPRIV-3-SYSTEM_MSG
+- LINK-3-UPDOWN
+exclude_message:
+- null
+include_code:
+- ETHPORT-5-IF_BANDWIDTH
+- ETHPORT-5-IF_DOWN_LINK_FAILURE
+- ETHPORT-5-IF_DOWN_MODULE_REMOVED
+include_message:
+- GigabitEthernet2
+include_severity:
+- '0'
+- '1'
+- '2'
+- '3'
+## SUB GROUP ##
+### sub group config will override global config ###
+sub_group:
+ sub_group_1:
+  host:
+  - null
+  exclude_code:
+  - null
+  exclude_message:
+  - null
+  include_code:
+  - null
+  include_message:
+  - null
+  include_severity:
+  - '0'
+  - '1'
+  - '2'
+  - '3'
+  - '4'
+  - '5'

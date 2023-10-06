@@ -1,0 +1,21 @@
+#!/bin/bash
+
+log_files=("/opt/mastersystem-syslog/logs/cron.log") 
+
+# Function to kill all background tail processes
+function cleanup {
+    echo "Exiting tail_logs..."
+    pkill -P $$ tail
+    exit
+}
+
+# Set the trap to call the cleanup function on SIGINT (e.g., when you press Ctrl+C)
+trap cleanup SIGINT
+
+# Start tailing all log files in the background
+for log_file in "${log_files[@]}"; do
+    tail -n 50 -f "$log_file" &
+done
+
+# Wait for all background processes to finish
+wait
