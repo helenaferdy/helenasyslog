@@ -2,11 +2,11 @@ import requests
 import os
 import yaml
 
-DIR_SYSLOG = '../mastersystem-syslog/conf/'
-DIR_CONNECTOR = '../mastersystem-connector/config/'
+# DIR_SYSLOG = '../mastersystem-syslog/conf/'
+# DIR_CONNECTOR = '../mastersystem-connector/config/'
 
-# DIR_SYSLOG = '/opt/mastersystem-syslog/conf/'
-# DIR_CONNECTOR = '/opt/mastersystem-connector/config/'
+DIR_SYSLOG = '/opt/mastersystem-syslog/conf/'
+DIR_CONNECTOR = '/opt/mastersystem-connector/config/'
 
 token_url = "https://webexapis.com/v1/access_token"
 client_id = "C545c21bd8bdf6668cbeee2f874691c1895bd390e75802fecd9e4c3f9eedc9d7a"

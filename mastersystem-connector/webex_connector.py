@@ -6,10 +6,10 @@ import yaml
 from sendtelegram import send_telegram
 from sendwhatsapp import send_whatsapp
 
-CONFIG_PATH = 'config/config.yml'
-GROUP_PATH = 'groups/'
-# CONFIG_PATH = '/opt/mastersystem-connector/config/config.yml'
-# GROUP_PATH = '/opt/mastersystem-connector/groups/'
+# CONFIG_PATH = 'config/config.yml'
+# GROUP_PATH = 'groups/'
+CONFIG_PATH = '/opt/mastersystem-connector/config/config.yml'
+GROUP_PATH = '/opt/mastersystem-connector/groups/'
 
 class PythonConnector:
     def __init__(self, ymlgroupconfig, access_token, config_group_name, config_group_full_path, config_telegram_id, config_whatsapp_id, config_webex_id, config_webex_room_id, config_chat_id):
@@ -50,12 +50,12 @@ class PythonConnector:
                 print(response.status_code, response.content)
                 return False
         except Exception as e:
-            print(f'Exception: {e}')
+            print(f'* Exception: {e}')
             return False
 
     def check_id(self):
         if self.config_chat_id == self.id:
-            print('No new messages')
+            print('* No new messages')
             return False
         else:
             return self.update_id()
@@ -67,7 +67,7 @@ class PythonConnector:
                 yaml.dump(self.ymlgroupconfig, yml_file, default_flow_style=False)
             return True
         except:
-            print("Error updating message id")
+            print("* Error updating message id")
             return False
 
     def send_message(self):
@@ -87,7 +87,7 @@ try:
     with open(CONFIG_PATH, "r") as yml_file:
         ymlconfig = yaml.safe_load(yml_file)
 except:
-    print("Error opening config file")
+    print("* Error opening config file")
 
 ACCESS_TOKEN = ymlconfig["access_token"]
 
@@ -113,11 +113,12 @@ def read_groups():
                     object = PythonConnector(ymlgroupconfig, ACCESS_TOKEN, config_group_name, group_full_path, config_telegram_id, config_whatsapp_id, config_webex_id, config_webex_room_id, config_chat_id)
                     x.append(object)
             except:
-                print(f"Error opening {group_file}")
+                print(f"* Error opening {group_file}")
     
 
 read_groups()
 for xx in x:
+    print(f"\n---= {xx.config_group_name.upper()} =---")
     if xx.read_message():
         if xx.check_id():
             xx.send_message()

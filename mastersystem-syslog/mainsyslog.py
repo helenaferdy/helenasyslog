@@ -8,8 +8,8 @@ from sendwhatsapp import send_whatsapp, send_whatsapp_max
 from sendwebex import send_webex
 from webex_meeting import start_meeting
 
-CONFIG_PATH = "conf/lab_config.yml"
-# CONFIG_PATH = "/opt/mastersystem-syslog/conf/config.yml"
+# CONFIG_PATH = "conf/lab_config.yml"
+CONFIG_PATH = "/opt/mastersystem-syslog/conf/config.yml"
 
 USE_WEBEX_CONNECTOR = True
 
