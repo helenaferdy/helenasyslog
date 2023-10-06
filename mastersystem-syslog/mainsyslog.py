@@ -6,12 +6,15 @@ import re
 from sendtelegram import send_telegram
 from sendwhatsapp import send_whatsapp, send_whatsapp_max
 from sendwebex import send_webex
+from webex_meeting import start_meeting
 
 CONFIG_PATH = "conf/lab_config.yml"
 # CONFIG_PATH = "/opt/mastersystem-syslog/conf/config.yml"
 
+USE_WEBEX_CONNECTOR = True
+
 class PythonSyslog:
-    def __init__(self, group, log_path, severities, out_mnemonics, in_mnemonics, out_messages, in_messages, wa_id, tele_id, webex_id, sub_group):
+    def __init__(self, group, log_path, severities, out_mnemonics, in_mnemonics, out_messages, in_messages, wa_id, tele_id, webex_id, webex_room_id, sub_group):
         self.group = group
         self.log_path = log_path
         self.severities = severities
@@ -22,6 +25,7 @@ class PythonSyslog:
         self.wa_id = wa_id
         self.tele_id = tele_id
         self.webex_id = webex_id
+        self.webex_room_id = webex_room_id
         self.sub_group = sub_group
         self.sub_key = ""
 
@@ -182,54 +186,6 @@ class PythonSyslog:
                 delimited_msg.append(lm)
             return False,delimited_msg
 
-    # def delimite_log(self):
-    #     delimited_msg = []
-    #     severity = ""
-    #     hostname = ""
-    #     mnemonic = ""
-    #     ip_address_pattern = r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
-    #     timestamp_pattern = r"\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}"
-    #     msg_pattern = r"%(.+)"
-
-    #     try:
-    #         for lm in self.log_messages:
-    #             msg_id = self.message_id()
-    #             ip_address = re.findall(ip_address_pattern, lm)
-    #             try:
-    #                 hostname = ymlconfig["host_mapping"][ip_address[0]]
-    #             except:
-    #                 hostname = "unknown"
-    #             timestamp = re.findall(timestamp_pattern, lm)
-    #             msg = re.search(msg_pattern, lm)
-
-    #             if msg: 
-    #                 msg_final = msg.group(1).strip()
-    #                 parts = msg_final.split(":", 1)
-    #                 mnemonic = parts[0].strip()
-    #                 msg_final = parts[1].strip()
-    #             else:
-    #                 mnemonic = "x"
-    #                 msg_final = lm
-
-    #             #severity
-    #             if "-0-" in lm: severity = "0"
-    #             elif "-1-" in lm: severity = "1"
-    #             elif "-2-" in lm: severity = "2"
-    #             elif "-3-" in lm: severity = "3"
-    #             elif "-4-" in lm: severity = "4"
-    #             elif "-5-" in lm: severity = "5"
-    #             elif "-6-" in lm: severity = "6"
-    #             elif "-7-" in lm: severity = "7"
-    #             else: severity = "99"
-
-    #             message = f'{msg_id} | {timestamp[0]} | {hostname.upper()} | {ip_address[0]} | {severity} | {mnemonic} | {msg_final}'
-    #             delimited_msg.append(message)
-    #         return True,delimited_msg
-    #     except Exception as e:
-    #         print(f"error delimiting log : {e}")
-    #         for lm in self.log_messages:
-    #             delimited_msg.append(lm)
-    #         return False,delimited_msg
         
     def filtering(self, delimited_message):
         final_message = []
@@ -398,9 +354,12 @@ class PythonSyslog:
             print(f"exception writing to filtered_syslog.log: {e}")
 
     def send_message(self, message):
-        send_webex(message, self.webex_id)
-        send_whatsapp(message, self.wa_id)
-        asyncio.run(send_telegram(message, self.tele_id))
+        if USE_WEBEX_CONNECTOR:
+            send_webex(message, self.webex_id)
+        else:
+            send_webex(message, self.webex_id)
+            send_whatsapp(message, self.wa_id)
+            asyncio.run(send_telegram(message, self.tele_id))
 
 
 #### Non Object ####
@@ -446,9 +405,10 @@ def read_groups():
                     wa_id = ymlgroupconfig['whatsapp_id']
                     tele_id = ymlgroupconfig['telegram_id']
                     webex_id = ymlgroupconfig['webex_id']
+                    webex_room_id = ymlgroupconfig['webex_room_id']
                     sub_group = ymlgroupconfig['sub_group']
 
-                    object = PythonSyslog(group, log_path, severities, out_mnemonics, in_mnemonics, out_messages, in_messages, wa_id, tele_id, webex_id, sub_group)
+                    object = PythonSyslog(group, log_path, severities, out_mnemonics, in_mnemonics, out_messages, in_messages, wa_id, tele_id, webex_id, webex_room_id, sub_group)
                     x.append(object)
             except:
                 print(f"Error opening {group_file}")
@@ -501,10 +461,8 @@ def run_python_syslog():
         print(f"=> Processed Messages : {xx.processed_count}")
         print(f"=> Trigger Meeting : {xx.trigger_meeting}")
 
-
         if xx.trigger_meeting:
-            pass
-
+            start_meeting(xx.webex_room_id, WEBEX_ACCESS_TOKEN)
 
 
 read_groups()

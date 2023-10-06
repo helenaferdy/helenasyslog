@@ -1,6 +1,6 @@
+access_token: MWMyYWI3ZTctOTRmZS00NTkyLWI4OTctNDM5YzI4N2E1OTRmZDljYWY0ZGYtYjE2_PF84_18a7bab3-8072-414f-ad6a-d2c44826aef8
+access_token_refresh: NTVhYzhhYjUtMTA0MS00YzNkLWJhZmYtOTY3ZjBjNzQzNDI1ZTk1YTI3OGYtMDI4_PF84_18a7bab3-8072-414f-ad6a-d2c44826aef8
 archive_log: /opt/mastersystem-syslog/logs/archived_syslog.log
-access_token : ''
-access_token_refresh: ''
 counter_msg_id: 1
 filtered_log: /opt/mastersystem-syslog/logs/filtered_syslog.log
 group_path: /opt/mastersystem-syslog/groups/
