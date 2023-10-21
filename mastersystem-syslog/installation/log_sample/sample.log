@@ -3,4 +3,4 @@ Sep 27 03:35:33 asa.helena.gg %ASA-2-411003: Interface inside, changed state to 
 Sep 27 03:56:10 asa.helena.gg %ASA-3-111008: User 'enable_15' executed the 'interface GigabitEthernet 0/2' command.
 Sep 27 03:56:12 asa.helena.gg %ASA-1-111008: User 'enable_15' executed the 'shutdown' command.
 Sep 27 04:06:46 asa.helena.gg %ASA-3-111010: User 'enable_15', running 'CLI' from IP 10.16.4.24, executed 'no shutdown'
-Sep 27 03:56:13 asa.helena.gg %ASA-2-411003: Interface inside, changed state to administratively up
+Sep 27 03:56:13 asa.helena.gg %ASA-3-411003: Interface inside, changed state to administratively up

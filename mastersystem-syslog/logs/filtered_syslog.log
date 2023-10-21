@@ -1,5 +1,0 @@
-101 | Sep 27 03:56:13 | ASA.HELENA.GG | 0.0.0.0 | 4 | ASA-4-411003 | Interface inside, changed state to administratively up | GROUP1_DC_ACI | Cause : Severity 4
-102 | Sep 27 03:56:12 | ASA.HELENA.GG | 0.0.0.0 | 5 | ASA-5-111008 | User 'enable_15' executed the 'shutdown' command. | GROUP1_DC_ACI | Cause : Severity 5
-103 | Sep 27 04:06:46 | ASA.HELENA.GG | 0.0.0.0 | 5 | ASA-5-111010 | User 'enable_15', running 'CLI' from IP 10.16.4.24, executed 'no shutdown' | GROUP1_DC_ACI | Cause : Severity 5
-104 | Sep 27 03:35:33 | ASA.HELENA.GG | 0.0.0.0 | 4 | ASA-4-411003 | Interface inside, changed state to administratively up | GROUP1_DC_ACI | Cause : Severity 4
-106 | Sep 27 03:56:10 | ASA.HELENA.GG | 0.0.0.0 | 5 | ASA-5-111008 | User 'enable_15' executed the 'interface GigabitEthernet 0/2' command. | GROUP1_DC_ACI | Cause : Severity 5

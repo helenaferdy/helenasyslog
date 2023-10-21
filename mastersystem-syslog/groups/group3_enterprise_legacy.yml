@@ -1,7 +1,7 @@
 ## GLOBAL ##
 log_path: /var/log/cisco/group3_enterprise_legacy.log
 telegram_id: -955087919
-whatsapp_id: '120363162449917809'
+whatsapp_id: '120363168779458118'
 webex_id: '65af5560-5e78-11ee-b543-2790d7de4e46'
 webex_room_id: 'Y2lzY29zcGFyazovL3VzL1JPT00vNjVhZjU1NjAtNWU3OC0xMWVlLWI1NDMtMjc5MGQ3ZGU0ZTQ2'
 exclude_code:

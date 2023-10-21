@@ -11,6 +11,9 @@ from sendwhatsapp import send_whatsapp
 CONFIG_PATH = '/opt/mastersystem-connector/config/config.yml'
 GROUP_PATH = '/opt/mastersystem-connector/groups/'
 
+HTTP_PROXY  = "http://10.167.0.5:8080"
+HTTPS_PROXY = "http://10.167.0.5:8080"
+
 class PythonConnector:
     def __init__(self, ymlgroupconfig, access_token, config_group_name, config_group_full_path, config_telegram_id, config_whatsapp_id, config_webex_id, config_webex_room_id, config_chat_id):
         self.ymlgroupconfig = ymlgroupconfig
@@ -23,7 +26,7 @@ class PythonConnector:
         self.config_room_id = config_webex_room_id
         self.config_chat_id = config_chat_id
 
-        self.max_msg_retrieved = 20
+        self.max_msg_retrieved = 10
         self.message = ''
         self.bot_email_address = 'mastersystem_syslog@webex.bot'
 
@@ -31,8 +34,13 @@ class PythonConnector:
         url = f'https://webexapis.com/v1/messages?roomId={self.config_room_id}&max={self.max_msg_retrieved}'
         headers = {"Authorization": f"Bearer {self.access_token}"}
 
+        proxies = { 
+              "http"  : HTTP_PROXY, 
+              "https" : HTTPS_PROXY
+            }
+
         try:
-            response = requests.get(url,headers=headers)
+            response = requests.get(url,headers=headers, proxies=proxies)
 
             if response.status_code == 200:
                 datas = response.json()['items']

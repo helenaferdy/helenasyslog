@@ -5,6 +5,7 @@ counter_msg_id: 1
 filtered_log: /opt/mastersystem-syslog/logs/filtered_syslog.log
 group_path: /opt/mastersystem-syslog/groups/
 host_mapping:
+  10.222.5.122: ASA-FIREWALL
   10.1.255.101: BDGACC-101
   10.1.255.102: BDGACC-102
   10.1.255.103: BDGACC-103

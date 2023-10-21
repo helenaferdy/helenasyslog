@@ -1,6 +1,16 @@
 import requests
 import os
 import yaml
+import time, datetime
+
+HTTP_PROXY  = "http://10.167.0.5:8080"
+HTTPS_PROXY = "http://10.167.0.5:8080"
+
+CURRENT_TIME = int(time.time())
+CURRENT_DATE = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+print(f"\n\n-----------------------------")
+print(f"--- {CURRENT_DATE}")
+
 
 # DIR_SYSLOG = '../mastersystem-syslog/conf/'
 # DIR_CONNECTOR = '../mastersystem-connector/config/'
@@ -28,6 +38,12 @@ try:
 except:
     print("Error opening config file")
 
+
+proxies = {
+              "http"  : HTTP_PROXY, 
+              "https" : HTTPS_PROXY
+            }
+
 REFRESH_TOKEN = ymlconfig["access_token_refresh"]
 
 payload = {
@@ -37,7 +53,7 @@ payload = {
     "client_secret": client_secret
 }
 
-response = requests.post(token_url, data=payload)
+response = requests.post(token_url, data=payload, proxies=proxies)
 
 if response.status_code == 200:
     new_access_token = response.json().get("access_token")

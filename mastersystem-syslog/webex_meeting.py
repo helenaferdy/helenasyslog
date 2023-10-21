@@ -7,6 +7,14 @@ URL = 'https://webexapis.com/v1/meetings'
 WEBEX_MEETING_DELAY = 5
 TITLE = 'Meeting'
 
+http_proxy  = "http://10.167.0.5:8080"
+https_proxy = "http://10.167.0.5:8080"
+
+proxies = { 
+              "http"  : http_proxy, 
+              "https" : https_proxy
+            }
+
 def get_date():
     raw_start = (datetime.utcnow() + timedelta(hours=7) + timedelta(minutes=WEBEX_MEETING_DELAY))
     start_time = raw_start.strftime('%Y-%m-%dT%H:%M:%S+07:00')
@@ -35,7 +43,7 @@ def start_meeting(room_id, access_token):
     }
 
     try:
-        response = requests.post(URL, headers=headers, json=data)
+        response = requests.post(URL, headers=headers, json=data, proxies=proxies)
 
         if response.status_code == 200:
             print(f"* {response.status_code} : Meeting scheduled")

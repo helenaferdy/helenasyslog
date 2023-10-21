@@ -1,7 +1,7 @@
 import requests
 
 def send_whatsapp(message, chat_id):
-    url = "http://localhost:5000/syslog"
+    url = "http://localhost:3000/syslog"
     headers = {"Content-Type": "application/json", "Authorization":"Basic YWRtaW46Y2lzY28xMjM="}
     msg = {
                 "id":chat_id,
