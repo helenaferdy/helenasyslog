@@ -17,7 +17,7 @@ include_code:
 - ETHPORT-5-IF_DOWN_LINK_FAILURE
 - ETHPORT-5-IF_DOWN_MODULE_REMOVED
 include_message:
-- GigabitEthernet2
+- null
 include_severity:
 - '0'
 - '1'

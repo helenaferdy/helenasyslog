@@ -1,9 +1,9 @@
 ## GLOBAL ##
-log_path: /var/log/cisco/group2_dc_legacy.log
+log_path: /var/log/cisco/group5_security_dc_drc.log
 telegram_id: -955087919
-whatsapp_id: '120363166085598263'
-webex_id: 'd0d9ca70-5e76-11ee-a4ce-a1303fb0372e'
-webex_room_id: 'Y2lzY29zcGFyazovL3VzL1JPT00vZDBkOWNhNzAtNWU3Ni0xMWVlLWE0Y2UtYTEzMDNmYjAzNzJl'
+whatsapp_id: ''
+webex_id: '3023bee0-77e1-11ee-bead-c5969fb2a946'
+webex_room_id: 'Y2lzY29zcGFyazovL3VzL1JPT00vMzAyM2JlZTAtNzdlMS0xMWVlLWJlYWQtYzU5NjlmYjJhOTQ2'
 exclude_code:
 - ARP-3-DUP_VADDR_SRC_IP
 - TACACS-3-TACACS_ERROR_MESSAGE
@@ -27,15 +27,15 @@ include_severity:
 sub_group:
  sub_group_1:
   host:
-  - 
+  - null
   exclude_code:
-  - 
+  - null
   exclude_message:
-  - 
+  - null
   include_code:
-  - 
+  - null
   include_message:
-  - 
+  - null
   include_severity:
   - '0'
   - '1'

@@ -43,6 +43,7 @@ class PythonSyslog:
         self.filtered_count = 0
 
         self.trigger_meeting = False
+        self.meeting_title = ""
 
     def read_syslog(self):
         try:
@@ -174,6 +175,11 @@ class PythonSyslog:
 
                 if int(severity) < 3:
                     self.trigger_meeting = True
+
+                    try: severity_text = SEVERITIES_TEXT[int(severity)]
+                    except: severity_text = "Others"
+
+                    self.meeting_title = f'{severity_text} : {mnemonic}'
 
                 message = f'{msg_id} | {timestamp} | {hostname.upper()} | {ip_address} | {severity} | {mnemonic} | {msg_final}'
                 delimited_msg.append(message)
@@ -452,7 +458,6 @@ def run_python_syslog():
             if final_message != "":
                 # print(final_message)
                 xx.send_message(final_message)
-                pass
             else:
                 print(f"all messages are filtered out")
 
@@ -462,7 +467,7 @@ def run_python_syslog():
         print(f"=> Trigger Meeting : {xx.trigger_meeting}")
 
         if xx.trigger_meeting:
-            start_meeting(xx.webex_room_id, WEBEX_ACCESS_TOKEN)
+            start_meeting(xx.webex_room_id, WEBEX_ACCESS_TOKEN, xx.meeting_title)
 
 
 read_groups()

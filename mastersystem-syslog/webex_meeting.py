@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 # MEETING_ID = 'Y2lzY29zcGFyazovL3VzL1JPT00vNTg1NDMyZTAtNTY4Yi0xMWVlLTkwNWYtODUwMjM1ZjJkYzdh'
 URL = 'https://webexapis.com/v1/meetings'
 WEBEX_MEETING_DELAY = 5
-TITLE = 'Meeting'
+title = 'Meeting'
 
 http_proxy  = "http://10.167.0.5:8080"
 https_proxy = "http://10.167.0.5:8080"
@@ -24,7 +24,7 @@ def get_date():
     print(f'* End Time : {end_time}')
     return start_time, end_time
 
-def start_meeting(room_id, access_token):
+def start_meeting(room_id, access_token, meeting_title):
     start_time, end_time = get_date()
     headers = {
         'Authorization': f'Bearer {access_token}',
@@ -33,7 +33,7 @@ def start_meeting(room_id, access_token):
     data = {
         'adhoc' : False,
         'roomId' : room_id, 
-        'title' : TITLE,
+        'title' : meeting_title,
         'start' : start_time,
         'end' : end_time,
         'allowAnyUserToBeCoHost' : True,
