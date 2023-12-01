@@ -1,0 +1,8 @@
+Nov 29 14:38:57 10.222.19.176 UTC+0700 DC1ACISVR31 %LOG_LOCAL7-2-SYSTEM_MSG [F0532][raised][interface-physical-down][critical][sys/phys-[eth1/13]/phys/fault-F0532] Port is down, reason being init(connected), used by EPG on node 1131 of fabric DCFABACI-01 with hostname DC1ACISVR31
+Nov 29 14:39:06 10.222.19.176 UTC+0700 DC1ACISVR31 %LOG_LOCAL7-2-SYSTEM_MSG [ys/fault-F0532] Port is down, DC1ACISVR31
+Nov 29 14:39:07 10.222.19.176 UTC+0700 DC1ACISVR31 %LOG_LOCAL7-2-SYSTEM_MSG [ys/fault-F0532] Port is down, DC1ACISVR31
+Sep  5 11:27:29 198.18.0.121 11232: *Sep  5 04:17:09.625: %LINEPROTO-3-UPDOWN: Line protocol on Interface GigabitEthernet2, changed state to up
+Sep  5 11:27:29 198.18.0.122 11232: *Sep  5 04:17:09.625: %LINEPROTO-3-UPDOWN: Line protocol on Interface GigabitEthernet2, changed state to up
+Sep  5 11:27:29 198.18.0.123 11232: *Sep  5 04:17:09.625: %LINEPROTO-3-UPDOWN: Line protocol on Interface GigabitEthernet2, changed state to up
+Sep 27 03:35:33 asa.helena.gg %ASA-2-411003: Interface inside, changed state to administratively up
+Sep 27 03:56:10 asa.helena.gg %ASA-3-111008: User 'enable_15' executed the 'interface GigabitEthernet 0/2' command.

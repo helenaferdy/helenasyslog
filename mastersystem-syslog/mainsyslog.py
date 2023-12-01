@@ -8,15 +8,22 @@ from sendwhatsapp import send_whatsapp, send_whatsapp_max
 from sendwebex import send_webex
 from webex_meeting import start_meeting
 
-# CONFIG_PATH = "conf/lab_config.yml"
-CONFIG_PATH = "/opt/mastersystem-syslog/conf/config.yml"
+TESTING_ENV = False
 
 USE_WEBEX_CONNECTOR = True
+CONFIG_PATH = "/opt/mastersystem-syslog/conf/config.yml"
+HOST_MAPPING_PATH = "/opt/mastersystem-syslog/conf/host_mapping.yml"
 
+if TESTING_ENV:
+    CONFIG_PATH = "conf/lab_config.yml"
+    HOST_MAPPING_PATH = "conf/host_mapping.yml"
+    
 class PythonSyslog:
     def __init__(self, group, log_path, severities, out_mnemonics, in_mnemonics, out_messages, in_messages, wa_id, tele_id, webex_id, webex_room_id, sub_group):
         self.group = group
         self.log_path = log_path
+        if TESTING_ENV:
+            self.log_path = "installation/log_sample/group1_dc_aci.log"
         self.severities = severities
         self.out_mnemonics = out_mnemonics
         self.in_mnemonics = in_mnemonics
@@ -98,7 +105,7 @@ class PythonSyslog:
         severity = ""
         hostname = ""
         mnemonic = ""
-        ip_address_pattern = r'\d{2}:\d{2}:\d{2} ([^\s]+)' # search IP / hostname after date
+        ip_address_pattern = r'\d{2}:\d{2}:\d{2} ([^\s]+)' # search IP after date
         ip_address_pattern2 = r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" # Search IP in whole message
         timestamp_pattern = r"\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}"
         msg_pattern = r"%(.+)"
@@ -106,10 +113,8 @@ class PythonSyslog:
         try:
             for lm in self.log_messages:
                 # ID
-                try:
-                    msg_id = self.message_id()
-                except:
-                    msg_id = 0
+                try: msg_id = self.message_id()
+                except: msg_id = 0
 
                 # IP, HOSTNAME
                 try:
@@ -118,10 +123,12 @@ class PythonSyslog:
                     if ip_match[0].isdigit():
                         ip_address = ip_match
                         hostname = "x"
-                        try:
-                            hostname = ymlconfig["host_mapping"][ip_address]
+                        try: 
+                            # hostname = ymlconfig["host_mapping"][ip_address]
+                            hostname = ymlhostmapping[ip_address]
                         except:
                             hostname = "x"
+                            print(f'* {ip_address} unmapped')
                     else:
                         ip_address = "0.0.0.0"
                         hostname = ip_match
@@ -132,19 +139,18 @@ class PythonSyslog:
                         ip_address = ip_address[0]
                         if hostname == "" or hostname == "x":
                             try:
-                                hostname = ymlconfig["host_mapping"][ip_address]
-                            except:
+                                hostname = ymlhostmapping[ip_address]
+                            except: 
                                 hostname = "x"
+                                print(f'* {ip_address} unmapped')
                     except:
                         ip_address = "x"
                         hostname = "x"
 
                 # TIMESTAMP
                 timestamp = re.findall(timestamp_pattern, lm)
-                try:
-                    timestamp = timestamp[1]
-                except:
-                    timestamp = timestamp[0]
+                try: timestamp = timestamp[1]
+                except: timestamp = timestamp[0]
 
                 # MNEMONIC, MESSAGE
                 try:
@@ -158,9 +164,22 @@ class PythonSyslog:
                     else:
                         mnemonic = "x"
                         msg_final = lm
+                    
+                    aci_mnemonic_exceptions = ["[", "]", "/"]
+                    for aci_x in aci_mnemonic_exceptions:
+                        if aci_x in mnemonic:
+                            raise
                 except:
-                    mnemonic = "x"
-                    msg_final = lm
+                    ## ACI
+                    try:
+                        aci_pattern = r"%(.*?)\s.*\]([^]]+)$"
+                        match = re.search(aci_pattern, lm)
+
+                        mnemonic = match.group(1)
+                        msg_final = match.group(2).strip()
+                    except:
+                        mnemonic = "x"
+                        msg_final = lm
 
                 #SEVERITY
                 if "-0-" in lm: severity = "0"
@@ -175,10 +194,8 @@ class PythonSyslog:
 
                 if int(severity) < 3:
                     self.trigger_meeting = True
-
                     try: severity_text = SEVERITIES_TEXT[int(severity)]
                     except: severity_text = "Others"
-
                     self.meeting_title = f'{severity_text} : {mnemonic}'
 
                 message = f'{msg_id} | {timestamp} | {hostname.upper()} | {ip_address} | {severity} | {mnemonic} | {msg_final}'
@@ -196,6 +213,8 @@ class PythonSyslog:
     def filtering(self, delimited_message):
         final_message = []
         filtered_message = []
+        self.processed_count = 0
+        self.filtered_count = 0
         for msg in delimited_message:
             parts = msg.split(" | ")
             id = parts[0]
@@ -285,7 +304,7 @@ class PythonSyslog:
 
         return severities,out_mnemonics,in_mnemonics,out_messages,in_messages
     
-    def remove_duplicate(self, message):
+    def remove_duplicate(self, message, filtered):
         unique = []
         final = []
 
@@ -297,8 +316,12 @@ class PythonSyslog:
             if ip_event not in unique:
                 unique.append(ip_event)
                 final.append(msg)
+            else:
+                filtered.append(f'{msg} | Cause : Duplicate')
+                self.processed_count -= 1
+                self.filtered_count += 1
         
-        return final
+        return final, filtered
 
     def beautify_log(self, log_data):
         parsed_data = {}
@@ -310,15 +333,13 @@ class PythonSyslog:
             hostname = parts[2]
             ip_address = parts[3]
             ## ONLY SHOWS HOSTNAME
-            ip_address = hostname
+            if hostname != "X":
+                ip_address = hostname
             # ip_address = hostname+" : "+ip_address
             severity_code = parts[4]
             mnemonic = parts[5]
             event = parts[6]
 
-            try: severity_text = SEVERITIES_TEXT[int(severity_code)]
-            except: severity_text = "Others"
-            
             if ip_address not in parsed_data:
                 parsed_data[ip_address] = {}
             if severity_code not in parsed_data[ip_address]:
@@ -335,6 +356,10 @@ class PythonSyslog:
         for ip_address, errors in parsed_data.items():
             result += f"[{ip_address}]\n"
             for severity_code, entries in errors.items():
+
+                try: severity_text = SEVERITIES_TEXT[int(severity_code)]
+                except: severity_text = "Others"
+                
                 result += f"\nSeverity : {severity_text} ({severity_code})\n"
                 for entry in entries:
                     result += f"* ID: {entry['Log ID']}\n"
@@ -350,7 +375,7 @@ class PythonSyslog:
                 for msg in processed_msg:
                     log.write(msg + '\n')
         except Exception as e:
-            print(f"exception writing to archived_syslog.log: {e}")
+            print(f"exception writing to sent_syslog.log: {e}")
         
         try:
             with open(FILTERED_LOG, "a") as log:
@@ -372,16 +397,19 @@ class PythonSyslog:
 
 CURRENT_TIME = int(time.time())
 CURRENT_DATE = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-print(f"\n\n-----------------------------")
-print(f"--- {CURRENT_DATE}")
+print(f"\n\n---------------------------------------------------------------")
+print(f"------------------------------------- {CURRENT_DATE} -----")
 
 
 ## OPEN CONFIG FILE
 try:
     with open(CONFIG_PATH, "r") as yml_file:
         ymlconfig = yaml.safe_load(yml_file)
+    with open(HOST_MAPPING_PATH, "r") as yml_file:
+        ymlhostmapping = yaml.safe_load(yml_file)
 except:
     print("Error opening config file")
+
 
 GROUP_PATH = ymlconfig["group_path"] 
 ARCHIVE_LOG = ymlconfig["archive_log"] 
@@ -422,22 +450,28 @@ def read_groups():
 def run_python_syslog():
     for xx in x:
         print(f"\n---= {xx.group.upper()} =---")
+        gap_counter = 0
         while True:
-            xx.read1_log_date = xx.read_syslog_date()
-            print(f"log is {xx.read1_log_date} seconds old")
+            if gap_counter < 3:
+                gap_counter += 1
+                xx.read1_log_date = xx.read_syslog_date()
+                print(f"log is {xx.read1_log_date} seconds old")
 
-            if xx.read_syslog():
-                print(f"{len(xx.log_messages)} log lines detected")
-                ## CROSSCHECK LOG FILE
-                xx.read2_log_date = xx.read_syslog_date()
-                if xx.read1_log_date == xx.read2_log_date:
-                    ## TRUNCATE LOG FILE
-                    xx.truncate_syslog()
-                    break
+                if xx.read_syslog():
+                    print(f"{len(xx.log_messages)} log lines detected")
+                    ## CROSSCHECK LOG FILE
+                    xx.read2_log_date = xx.read_syslog_date()
+                    if xx.read1_log_date == xx.read2_log_date:
+                        ## TRUNCATE LOG FILE
+                        if not TESTING_ENV:
+                            xx.truncate_syslog()
+                        break
+                    else:
+                        print("new log detected mid process. rerunning")
                 else:
-                    print("new log detected mid process. rerunning")
+                    print("log empty")
+                    break
             else:
-                print("log empty")
                 break
 
         ## PARSING LOGS
@@ -446,28 +480,35 @@ def run_python_syslog():
             delimited_msg_check, delimited_msg = xx.delimite_log()
             if delimited_msg_check:
                 processed_msg,filtered_msg = xx.filtering(delimited_msg)
-                ## WRITE TO archive_syslog.log AND filtered_syslog.log
-                xx.archive_syslog(processed_msg,filtered_msg)
                 ## REMOVE DUPLICATE
-                non_duplicate = xx.remove_duplicate(processed_msg)
+                non_duplicate, filtered_non_duplicate = xx.remove_duplicate(processed_msg, filtered_msg)
+                ## WRITE TO sent_syslog.log AND filtered_syslog.log
+                xx.archive_syslog(non_duplicate, filtered_non_duplicate)
+                ## FORMAT for sending
                 final_message = xx.beautify_log(non_duplicate)
             else:
                 for msg in delimited_msg:
                     final_message += msg+"\n"
             ## SENDING MESSAGES
             if final_message != "":
-                # print(final_message)
-                xx.send_message(final_message)
+                if not TESTING_ENV:
+                    xx.send_message(final_message)
+                else:
+                    print("\n\n********* DEBUG *********\n")
+                    print(final_message)
             else:
                 print(f"all messages are filtered out")
 
-        print(f"\n=> Total Log Messages : {len(xx.log_messages)}")
-        print(f"=> Filtered Messages : {xx.filtered_count}")
-        print(f"=> Processed Messages : {xx.processed_count}")
-        print(f"=> Trigger Meeting : {xx.trigger_meeting}")
+        print(f"\n=> Total Logs : {len(xx.log_messages)}")
+        print(f"=> Filtered Logs : {xx.filtered_count}")
+        print(f"=> Processed Logs : {xx.processed_count}")
 
-        if xx.trigger_meeting:
-            start_meeting(xx.webex_room_id, WEBEX_ACCESS_TOKEN, xx.meeting_title)
+        # print(f"=> Trigger Meeting : {xx.trigger_meeting}")
+        # if xx.trigger_meeting:
+        #     start_meeting(xx.webex_room_id, WEBEX_ACCESS_TOKEN, xx.meeting_title)
+
+        if TESTING_ENV:
+            break
 
 
 read_groups()
