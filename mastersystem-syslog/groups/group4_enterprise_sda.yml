@@ -5,12 +5,18 @@ whatsapp_id: '120363148617789695'
 webex_id: '23e80a00-5e78-11ee-87e4-23bc876c810e'
 webex_room_id: 'Y2lzY29zcGFyazovL3VzL1JPT00vMjNlODBhMDAtNWU3OC0xMWVlLTg3ZTQtMjNiYzg3NmM4MTBl'
 exclude_code:
+- SFF8472-3-THRESHOLD_VIOLATION
+- SMART_LIC-3-COMM_FAILED
+- SNMP-3-RESPONSE_DELAYED
+- EARL-DFC3-3-NF_PARITY_ERROR
+- ILPOWER-3-CONTROLLER_PORT_ERR
 - ARP-3-DUP_VADDR_SRC_IP
 - TACACS-3-TACACS_ERROR_MESSAGE
 - AUTHPRIV-3-SYSTEM_MSG
 - LINK-3-UPDOWN
 exclude_message:
-- null
+- Interface GigabitEthernet2/0/27, changed state to up
+- Interface GigabitEthernet2/0/27, changed state to down
 include_code:
 - ETHPORT-5-IF_BANDWIDTH
 - ETHPORT-5-IF_DOWN_LINK_FAILURE

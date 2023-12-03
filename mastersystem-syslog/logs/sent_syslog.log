@@ -1,0 +1,5 @@
+679 | Sep 27 03:35:33 | ASA.HELENA.GG | 0.0.0.0 | 2 | ASA-2-411003 | Interface inside, changed state to administratively up | GROUP1_DC_ACI
+680 | Sep 27 03:56:10 | ASA2.HELENA.GG | 0.0.0.0 | 3 | ASA-3-111008 | User 'enable_15' executed the 'interface GigabitEthernet 0/2' command. | GROUP1_DC_ACI
+683 | Sep  5 04:17:09 | XE2 | 198.18.0.122 | 3 | LINEPROTO-3-UPDOWN | Line protocol on Interface GigabitEthernet2, changed state to up | GROUP1_DC_ACI
+684 | Sep  5 04:17:09 | XE3 | 198.18.0.123 | 3 | LINEPROTO-3-UPDOWN | Line protocol on Interface GigabitEthernet2, changed state to up | GROUP1_DC_ACI
+685 | Sep  5 04:17:09 | XE1 | 198.18.0.121 | 3 | LINEPROTO-3-UPDOWN | Line protocol on Interface GigabitEthernet2, changed state to up | GROUP1_DC_ACI

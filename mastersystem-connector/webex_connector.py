@@ -6,13 +6,17 @@ import yaml
 from sendtelegram import send_telegram
 from sendwhatsapp import send_whatsapp
 
-# CONFIG_PATH = 'config/config.yml'
-# GROUP_PATH = 'groups/'
+TESTING_ENV = False
+
 CONFIG_PATH = '/opt/mastersystem-connector/config/config.yml'
 GROUP_PATH = '/opt/mastersystem-connector/groups/'
 
-HTTP_PROXY  = "http://10.167.0.5:8080"
-HTTPS_PROXY = "http://10.167.0.5:8080"
+if TESTING_ENV:
+    CONFIG_PATH = 'config/config.yml'
+    GROUP_PATH = 'groups/'
+
+# HTTP_PROXY  = "http://10.167.0.5:8080"
+# HTTPS_PROXY = "http://10.167.0.5:8080"
 
 class PythonConnector:
     def __init__(self, ymlgroupconfig, access_token, config_group_name, config_group_full_path, config_telegram_id, config_whatsapp_id, config_webex_id, config_webex_room_id, config_chat_id):
@@ -30,29 +34,31 @@ class PythonConnector:
         self.message = ''
         self.bot_email_address = 'mastersystem_syslog@webex.bot'
 
+        self.datas = []
+
     def read_message(self):
         url = f'https://webexapis.com/v1/messages?roomId={self.config_room_id}&max={self.max_msg_retrieved}'
         headers = {"Authorization": f"Bearer {self.access_token}"}
 
-        proxies = { 
-              "http"  : HTTP_PROXY, 
-              "https" : HTTPS_PROXY
-            }
+        # proxies = { 
+        #       "http"  : HTTP_PROXY, 
+        #       "https" : HTTPS_PROXY
+        #     }
 
         try:
-            response = requests.get(url,headers=headers, proxies=proxies)
+            response = requests.get(url,headers=headers)
 
             if response.status_code == 200:
-                datas = response.json()['items']
-                for data in datas:
+                self.datas = response.json()['items']
+                for data in self.datas:
                     if data['personEmail'] == self.bot_email_address:
                         self.id = data['id']
                         self.email = data['personEmail']
                         self.message = data['text']
 
-                        print('\n-----------------------------------')
+                        print('\n**************************************************************************************************************')
                         print(self.message)
-                        print('-----------------------------------\n')
+                        print('**************************************************************************************************************\n')
                         return True
             else:
                 print(response.status_code, response.content)
@@ -60,6 +66,9 @@ class PythonConnector:
         except Exception as e:
             print(f'* Exception: {e}')
             return False
+        
+    def read_message_summary(self):
+        pass
 
     def check_id(self):
         if self.config_chat_id == self.id:
@@ -129,7 +138,10 @@ for xx in x:
     print(f"\n---= {xx.config_group_name.upper()} =---")
     if xx.read_message():
         if xx.check_id():
-            xx.send_message()
+            if not TESTING_ENV:
+                xx.send_message()
+            # else:
+            #     print(xx.message)
     
 
 

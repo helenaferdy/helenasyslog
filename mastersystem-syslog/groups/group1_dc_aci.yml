@@ -6,6 +6,8 @@ whatsapp_id: '120363167556699860'
 webex_id: 'd154f870-5e77-11ee-ac0b-db4f2dd97786'
 webex_room_id: 'Y2lzY29zcGFyazovL3VzL1JPT00vZDE1NGY4NzAtNWU3Ny0xMWVlLWFjMGItZGI0ZjJkZDk3Nzg2'
 exclude_code:
+- LOG_LOCAL7-2-SYSTEM_MSG
+- LOG_LOCAL7-3-SYSTEM_MSG
 - SFF8472-3-THRESHOLD_VIOLATION
 - SMART_LIC-3-COMM_FAILED
 - SNMP-3-RESPONSE_DELAYED
@@ -16,7 +18,7 @@ exclude_code:
 - AUTHPRIV-3-SYSTEM_MSG
 - LINK-3-UPDOWN
 exclude_message:
-- null
+- hostname non-retrievable
 include_code:
 - ETHPORT-5-IF_BANDWIDTH
 - ETHPORT-5-IF_DOWN_LINK_FAILURE

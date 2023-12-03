@@ -1,0 +1,3 @@
+681 | Nov 29 14:39:06 | DC1ACISVR31 | 10.222.19.176 | 2 | LOG_LOCAL7-2-SYSTEM_MSG | Port is down, DC1ACISVR31 | GROUP1_DC_ACI | Cause : Mnemonic LOG_LOCAL7-2-SYSTEM_MSG excluded
+682 | Nov 29 14:38:57 | DC1ACISVR31 | 10.222.19.176 | 2 | LOG_LOCAL7-2-SYSTEM_MSG | Port is down, reason being init(connected), used by EPG on node 1131 of fabric DCFABACI-01 with hostname DC1ACISVR31 | GROUP1_DC_ACI | Cause : Mnemonic LOG_LOCAL7-2-SYSTEM_MSG excluded
+686 | Nov 29 14:39:07 | DC1ACISVR31 | 10.222.19.176 | 2 | LOG_LOCAL7-2-SYSTEM_MSG | Port is down, DC1ACISVR31 | GROUP1_DC_ACI | Cause : Mnemonic LOG_LOCAL7-2-SYSTEM_MSG excluded
